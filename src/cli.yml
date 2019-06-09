@@ -1,0 +1,10 @@
+name: lgtm
+version: "0.1"
+author: Yoshihiro Tanaka
+args:
+    - source:
+        required: true
+        index: 1
+    - target:
+        required: true
+        index: 2
