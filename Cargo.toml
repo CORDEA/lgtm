@@ -1,0 +1,6 @@
+[package]
+name = "lgtm"
+version = "0.1.0"
+authors = ["Yoshihiro Tanaka <contact@cordea.jp>"]
+
+[dependencies]
