@@ -38,7 +38,7 @@ fn main() {
     let title_size = get_text_size(&font, title_scale, TITLE);
 
     let title_x = (w / 2) - (title_size.width / 2) - title_size.first_padding;
-    let title_y = (h / 2) - (title_size.height / 2);
+    let title_y = (h * 2/3) - (title_size.height / 2);
     let desc_y = title_y  + title_size.height + 20;
 
     let color = Rgba([0u8, 0u8, 0u8, 1u8]);
