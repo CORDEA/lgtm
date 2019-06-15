@@ -14,6 +14,7 @@ const TITLE: &str = "LGTM";
 const DESCRIPTION: &str = "Looks Good To Me";
 
 struct Size {
+    first_padding: u32,
     width: u32,
     height: u32,
 }
@@ -36,7 +37,7 @@ fn main() {
     let title_scale = Scale {x: title_scale, y: title_scale};
     let title_size = get_text_size(&font, title_scale, TITLE);
 
-    let title_x = (w / 2) - (title_size.width / 2);
+    let title_x = (w / 2) - (title_size.width / 2) - title_size.first_padding;
     let title_y = (h / 2) - (title_size.height / 2);
     let desc_y = title_y  + title_size.height + 20;
 
@@ -54,15 +55,19 @@ fn draw_description(image: &mut DynamicImage, color: Rgba<u8>, y: u32 , font: &F
 
     let desc_scale = Scale {x: desc_scale, y: desc_scale};
 
-    let desc_size = get_text_size(&font, desc_scale, &DESCRIPTION.replace(" ", ""));
     let splitted: Vec<&str> = DESCRIPTION.split(" ").collect();
-    let width = desc_size.width + ((splitted.len() - 1) as u32 * margin);
+    let sizes: Vec<Size> = splitted.iter()
+        .map(|s| get_text_size(&font, desc_scale, s))
+        .collect();
+
+    let width: u32 = sizes.iter().map(|s| s.width).sum::<u32>()
+        + ((splitted.len() - 1) as u32 * margin);
     let mut current_x = (w / 2) - (width / 2);
 
-    for s in splitted {
-        let desc_size = get_text_size(&font, desc_scale, s);
+    for (s, size) in splitted.iter().zip(sizes.iter()) {
+        current_x -= size.first_padding;
         draw_text_mut(image, color, current_x, y, desc_scale, &font, s);
-        current_x += margin + desc_size.width;
+        current_x += margin + size.width + size.first_padding;
     }
 }
 
@@ -72,7 +77,8 @@ fn get_text_size(font: &Font, scale: Scale, text: &str) -> Size {
         .map(|g| g.pixel_bounding_box().unwrap())
         .collect();
 
-    let width = glyphs.last().unwrap().max.x - glyphs.first().unwrap().min.x;
+    let first_x = glyphs.first().unwrap().min.x;
+    let width = glyphs.last().unwrap().max.x - first_x;
     let height = glyphs.iter().map(|b| b.height()).max().unwrap();
-    return Size {width: width as u32, height: height as u32};
+    return Size {first_padding: first_x as u32, width: width as u32, height: height as u32};
 }
