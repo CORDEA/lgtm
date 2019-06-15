@@ -10,6 +10,9 @@ use image::{GenericImageView, Rgba};
 use imageproc::drawing::draw_text_mut;
 use rusttype::{Font, FontCollection, Scale, Rect, point};
 
+const TITLE: &str = "LGTM";
+const DESCRIPTION: &str = "Looks Good To Me";
+
 struct Size {
     width: i32,
     height: i32,
@@ -27,17 +30,15 @@ fn main() {
     let font = Vec::from(include_bytes!("Roboto-Black.ttf") as &[u8]);
     let font = FontCollection::from_bytes(font).unwrap().into_font().unwrap();
 
-    let text = "";
-
     let (w, h) = image.dimensions();
     let scale = h as f32 / 3.0;
     let scale = Scale {x: scale, y: scale};
 
-    let Size {width, height} = get_text_size(&font, scale, text);
+    let Size {width, height} = get_text_size(&font, scale, TITLE);
     let x = (w / 2) - (width as u32 / 2);
     let y = (h / 2) - (height as u32 / 2);
 
-    draw_text_mut(&mut image, Rgba([0u8, 0u8, 0u8, 1u8]), x, y, scale, &font, text);
+    draw_text_mut(&mut image, Rgba([0u8, 0u8, 0u8, 1u8]), x, y, scale, &font, TITLE);
     let _ = image.save(target).unwrap();
 }
 
