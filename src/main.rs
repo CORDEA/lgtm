@@ -39,7 +39,8 @@ fn main() {
 
     let title_x = (w / 2) - (title_size.width / 2) - title_size.first_padding;
     let title_y = (h * 2/3) - (title_size.height / 2);
-    let desc_y = title_y  + title_size.height + 20;
+    let padding = h / 30;
+    let desc_y = title_y  + title_size.height + padding;
 
     let color = Rgba([0u8, 0u8, 0u8, 1u8]);
     draw_description(&mut image, color, desc_y, &font);
