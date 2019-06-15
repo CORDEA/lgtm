@@ -33,7 +33,7 @@ fn main() {
 
     let (w, h) = image.dimensions();
 
-    let title_scale = h as f32 / 3.0;
+    let title_scale = h as f32 / 5.0;
     let title_scale = Scale {x: title_scale, y: title_scale};
     let title_size = get_text_size(&font, title_scale, TITLE);
 
