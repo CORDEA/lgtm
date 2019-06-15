@@ -5,6 +5,8 @@ authors = ["Yoshihiro Tanaka <contact@cordea.jp>"]
 
 [dependencies]
 image = "0"
+imageproc = "0"
+rusttype = "0"
 
 [dependencies.clap]
 version = "2"
