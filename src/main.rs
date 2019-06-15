@@ -1,7 +1,11 @@
 #[macro_use]
 extern crate clap;
+extern crate image;
+extern crate imageproc;
+extern crate rusttype;
 
 use clap::App;
+use rusttype::{FontCollection};
 
 fn main() {
     let yaml = load_yaml!("cli.yml");
@@ -10,6 +14,10 @@ fn main() {
     let source = matches.value_of("source").unwrap();
     let target = matches.value_of("target").unwrap();
 
-    println!("{}", source);
-    println!("{}", target);
+    let mut image = image::open(source).unwrap();
+
+    let font = Vec::from(include_bytes!("ttf") as &[u8]);
+    let font = FontCollection::from_bytes(font).unwrap().into_font().unwrap();
+
+    let _ = image.save(target).unwrap();
 }
