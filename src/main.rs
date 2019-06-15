@@ -50,13 +50,20 @@ fn main() {
 fn draw_description(image: &mut DynamicImage, color: Rgba<u8>, y: u32 , font: &Font) {
     let (w, h) = image.dimensions();
     let desc_scale = h as f32 / 10.0;
+    let margin = w / 20;
 
     let desc_scale = Scale {x: desc_scale, y: desc_scale};
-    let desc_size = get_text_size(&font, desc_scale, DESCRIPTION);
 
-    let desc_x = (w / 2) - (desc_size.width / 2);
+    let desc_size = get_text_size(&font, desc_scale, &DESCRIPTION.replace(" ", ""));
+    let splitted: Vec<&str> = DESCRIPTION.split(" ").collect();
+    let width = desc_size.width + ((splitted.len() - 1) as u32 * margin);
+    let mut current_x = (w / 2) - (width / 2);
 
-    draw_text_mut(image, color, desc_x, y, desc_scale, &font, DESCRIPTION);
+    for s in splitted {
+        let desc_size = get_text_size(&font, desc_scale, s);
+        draw_text_mut(image, color, current_x, y, desc_scale, &font, s);
+        current_x += margin + desc_size.width;
+    }
 }
 
 fn get_text_size(font: &Font, scale: Scale, text: &str) -> Size {
