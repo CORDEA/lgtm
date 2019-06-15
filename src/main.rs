@@ -5,7 +5,9 @@ extern crate imageproc;
 extern crate rusttype;
 
 use clap::App;
-use rusttype::{FontCollection};
+use image::Rgba;
+use imageproc::drawing::draw_text_mut;
+use rusttype::{FontCollection, Scale};
 
 fn main() {
     let yaml = load_yaml!("cli.yml");
@@ -18,6 +20,9 @@ fn main() {
 
     let font = Vec::from(include_bytes!("ttf") as &[u8]);
     let font = FontCollection::from_bytes(font).unwrap().into_font().unwrap();
+
+    let scale = Scale {x: 100.0, y: 100.0};
+    draw_text_mut(&mut image, Rgba([0u8, 0u8, 0u8, 1u8]), 0, 0, scale, &font, "");
 
     let _ = image.save(target).unwrap();
 }
