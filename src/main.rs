@@ -33,32 +33,32 @@ fn main() {
 
     let (w, h) = image.dimensions();
 
-    let title_scale = h as f32 / 5.0;
-    let title_scale = Scale {x: title_scale, y: title_scale};
-    let title_size = get_text_size(&font, title_scale, TITLE);
+    let scale = h as f32 / 5.0;
+    let scale = Scale {x: scale, y: scale};
+    let size = get_text_size(&font, scale, TITLE);
 
-    let title_x = (w / 2) - (title_size.width / 2) - title_size.first_padding;
-    let title_y = (h * 2/3) - (title_size.height / 2);
+    let title_x = (w / 2) - (size.width / 2) - size.first_padding;
+    let title_y = (h * 2/3) - (size.height / 2);
     let padding = h / 30;
-    let desc_y = title_y  + title_size.height + padding;
+    let desc_y = title_y  + size.height + padding;
 
     let color = Rgba([0u8, 0u8, 0u8, 1u8]);
     draw_description(&mut image, color, desc_y, &font);
-    draw_text_mut(&mut image, color, title_x, title_y, title_scale, &font, TITLE);
+    draw_text_mut(&mut image, color, title_x, title_y, scale, &font, TITLE);
 
     let _ = image.save(target).unwrap();
 }
 
 fn draw_description(image: &mut DynamicImage, color: Rgba<u8>, y: u32 , font: &Font) {
     let (w, h) = image.dimensions();
-    let desc_scale = h as f32 / 10.0;
+    let scale = h as f32 / 10.0;
     let margin = w / 20;
 
-    let desc_scale = Scale {x: desc_scale, y: desc_scale};
+    let scale = Scale {x: scale, y: scale};
 
     let splitted: Vec<&str> = DESCRIPTION.split(" ").collect();
     let sizes: Vec<Size> = splitted.iter()
-        .map(|s| get_text_size(&font, desc_scale, s))
+        .map(|s| get_text_size(&font, scale, s))
         .collect();
 
     let width: u32 = sizes.iter().map(|s| s.width).sum::<u32>()
@@ -67,7 +67,7 @@ fn draw_description(image: &mut DynamicImage, color: Rgba<u8>, y: u32 , font: &F
 
     for (s, size) in splitted.iter().zip(sizes.iter()) {
         current_x -= size.first_padding;
-        draw_text_mut(image, color, current_x, y, desc_scale, &font, s);
+        draw_text_mut(image, color, current_x, y, scale, &font, s);
         current_x += margin + size.width + size.first_padding;
     }
 }
